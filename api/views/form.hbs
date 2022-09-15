@@ -1,0 +1,38 @@
+<head>
+    <script>
+        function contar(val){
+            location.href="/teste2/"+document.getElementById("idvalor").value;
+        }
+    </script>
+</head>
+<form action="/salvar" method="POST">
+    <label>Nome</label>
+    <input type="text" name="Nome" value="{{nome}}"/>
+
+    <label>Data Nascimento</label>
+    <input type="text" name="dataNascimento" value="{{data_nascimento}}"/>
+
+    <label>E-mail</label>
+    <input type="text" name="email" value="{{email}}"/>
+
+    <label>Senha</label>
+    <input type="text" name="senha" value="{{senha}}"/>
+
+    <label>Sexo</label>
+    <input type="text" name="sexo" value="{{sexo}}"/>
+
+    <label>Telefone</label>
+    <input type="text" name="telefone" value="{{telefone}}"/>
+
+    <label>Celular</label>
+    <input type="text" name="celular" value="{{celular}}"/>
+
+    <label>Fumante</label>
+    <input type="text" name="fumante" value="{{fumante}}"/>
+
+    <label>Municipio</label>
+    <input type="text" name="municipio" value="{{municipio}}"/>
+
+    <input type="submit" value="Limpar"/>
+
+</form>
