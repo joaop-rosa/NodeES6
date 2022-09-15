@@ -1,0 +1,133 @@
+*,
+*:after,
+*:before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+
+html {
+    min-height: 100vh;
+}
+
+img {
+    max-width: 100%;
+}
+
+li {
+    list-style: none;
+}
+
+button {
+    border: none;
+}
+
+body,
+#root {
+    list-style-type: none;
+    min-height: 100vh;
+    background: #D2DAFF;
+}
+
+
+.padding-header {
+    padding-top: 120px;
+}
+
+.div-main {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div-main form {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+}
+
+.div-main form h1 {
+    padding: 20px 20px;
+
+}
+
+.form-request {
+    width: 40%;
+    background: #B1B2FF;
+    box-shadow: 0 0 1em black;
+    z-index: 1;
+}
+
+.form-response {
+    width: 30%;
+    background: #AAC4FF;
+}
+
+.div-form-inputs {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 55vh;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    padding: 10px 20px;
+}
+
+.form-field select,
+.form-field input {
+    height: 48px;
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: text;
+}
+
+.form-field select {
+    cursor: pointer;
+}
+
+.form-field input {
+    cursor: text;
+}
+
+.div-form-buttons {
+    align-self: flex-end;
+    padding: 20px 20px;
+}
+
+.button-form {
+    padding: 10px 20px;
+    font-size: 20px;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.button-form-submit {
+    background: rgb(27, 156, 27);
+    color: whitesmoke;
+}
+
+.button-form-submit:hover {
+    background: rgb(20, 113, 20);
+    color: whitesmoke;
+}
+
+.button-form-reset {
+    background: rgb(187, 34, 34);
+    color: whitesmoke;
+}
+
+.button-form-reset:hover {
+    background: rgb(134, 25, 25);
+    color: whitesmoke;
+}

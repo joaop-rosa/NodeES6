@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<script>
+    const formRequest = {
+        nome: '',
+        email: '',
+        senha: '',
+        telefone: '',
+        sexo: '',
+        celular: '',
+        fumante: '',
+        municipio: '',
+        dataNascimento: '',
+    }
+
+    function limparForm() {
+        Object.keys(formRequest).forEach(key => {
+            formRequest[key] = ''
+        })
+    }
+
+    async function request(event) {
+        event.preventDefault()
+        let formBody = [];
+        for (let property in formRequest) {
+            const encodedKey = encodeURIComponent(property);
+            const encodedValue = encodeURIComponent(formRequest[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+        const request = new Request('http://localhost:3000/', {
+            method: 'POST',
+            body: formBody,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+        })
+        const res = await fetch(request).then((response) => response.body)
+            .then((rb) => {
+                const reader = rb.getReader();
+                return new ReadableStream({
+                    start(controller) {
+                        function push() {
+                            reader.read().then(({ done, value }) => {
+                                if (done) {
+                                    controller.close();
+                                    return;
+                                }
+                                controller.enqueue(value);
+                                push();
+                            });
+                        }
+                        push();
+                    },
+                });
+            })
+            .then((stream) =>
+                new Response(stream, { headers: { 'Content-Type': 'application/json' } }).json()
+            )
+            .then((result) => {
+                return result
+            })
+            .catch(e => {
+                console.log(e);
+            })
+        buildFormResponse(res)
+    }
+
+    function buildFormResponse(response) {
+        Object.keys(response).forEach(key => {
+            const input = document.getElementById(key + "-response")
+            input.setAttribute('value', response[key])
+        })
+    }
+
+    function cleanFormResponse() {
+        Object.keys(formRequest).forEach(key => {
+            const input = document.getElementById(key + "-response")
+            if (input?.getAttribute('value')) {
+                input.removeAttribute('value')
+            }
+        })
+    }
+
+    function handleChange(event) {
+        const { name, value } = event.target
+        formRequest[name] = value
+    }
+
+</script>
+
+<body>
+    <div class="div-main">
+        <form onsubmit="request(event)" class="form-request">
+            <h1>Registrar</h1>
+            <div class="div-form-inputs">
+                <div class="form-field">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" oninput="handleChange(event)">
+                </div>
+                <div class="form-field">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" oninput="handleChange(event)">
+                </div>
+                <div class="form-field">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" name="senha" oninput="handleChange(event)">
+                </div>
+                <div class="form-field">
+                    <label for="sexo">Sexo:</label>
+                    <select name="sexo" id="sexo" name="sexo" onclick="handleChange(event)">
+                        <option selected disabled value="">Selecione o seu sexo</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="telefone">Telefone Residencial:</label>
+                    <input type="tel" id="telefone" name="telefone" oninput="handleChange(event)"
+                        placeholder="XX-XXXX-XXXX" pattern="[0-9]{2}-[0-9]{4}-[0-9]{4}">
+                </div>
+                <div class="form-field">
+                    <label for="celular">Celular:</label>
+                    <input type="tel" id="celular" name="celular" oninput="handleChange(event)"
+                        placeholder="XX-XXXXX-XXXX" pattern="[0-9]{2}-[0-9]{5}-[0-9]{4}">
+                </div>
+                <div class="form-field">
+                    <label for="fumante">Fumante:</label>
+                    <select name="fumante" id="fumante" name="fumante" onclick="handleChange(event)">
+                        <option selected disabled value="">------</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="municipio">Municipio de Origem:</label>
+                    <input type="text" id="municipio" name="municipio" oninput="handleChange(event)">
+                </div>
+                <div class="form-field">
+                    <label for="data_nascimento">Data de nascimento:</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" oninput="handleChange(event)">
+                </div>
+            </div>
+            <div class="div-form-buttons">
+                <button class="button-form button-form-submit" type="submit">Gravar</button>
+                <button class="button-form button-form-reset" onclick="limparForm()" type="reset">Cancelar</button>
+            </div>
+
+        </form>
+
+        <form onsubmit="" class="form-response">
+            <h1>Dados</h1>
+            <div class="div-form-inputs">
+                <div class="form-field">
+                    <label for="nome-response">Nome:</label>
+                    <input disabled type="text" id="nome-response">
+                </div>
+                <div class="form-field">
+                    <label for="email-response">Email:</label>
+                    <input disabled type="email" id="email-response">
+                </div>
+                <div class="form-field">
+                    <label for="senha-response">Senha:</label>
+                    <input disabled type="password" id="senha-response">
+                </div>
+                <div class="form-field">
+                    <label for="sexo-response">Sexo:</label>
+                    <input disabled type="text" id="sexo-response">
+                </div>
+                <div class="form-field">
+                    <label for="telefone-response">Telefone Residencial:</label>
+                    <input disabled type="tel" id="telefone-response" pattern="[0-9]{2}-[0-9]{4}-[0-9]{4}">
+                </div>
+                <div class="form-field">
+                    <label for="celular-response">Celular:</label>
+                    <input disabled type="tel" id="celular-response" pattern="[0-9]{2}-[0-9]{5}-[0-9]{4}">
+                </div>
+                <div class="form-field">
+                    <label for="fumante-response">Fumante:</label>
+                    <input disabled type="text" id="fumante-response">
+                </div>
+                <div class="form-field">
+                    <label for="municipio-response">Municipio de Origem:</label>
+                    <input disabled type="text" id="municipio-response">
+                </div>
+                <div class="form-field">
+                    <label for="data_nascimento-response">Data de nascimento:</label>
+                    <input disabled type="date" id="data_nascimento-response">
+                </div>
+            </div>
+            <div class="div-form-buttons">
+                <button class="button-form button-form-reset" onclick="cleanFormResponse()" type="reset">Limpar</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
